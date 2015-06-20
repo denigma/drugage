@@ -9,3 +9,7 @@ addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.3") //ScalaJS
 addSbtPlugin("com.typesafe.sbt" % "sbt-twirl" % "1.1.1") //templates
 
 addSbtPlugin("com.gilt" % "sbt-dependency-graph-sugar" % "0.7.5") //visual dependency management
+
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0")
+
+resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"

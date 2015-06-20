@@ -11,7 +11,7 @@ import scala.collection.immutable.Map
 
 object TestData{
 
-  val menuItems = List("Find Plasmids","Deposit Plasmids","How to Order","Plasmid Reference")
+  val menuItems = List("Find Plasmids", "Deposit Plasmids", "How to Order", "Plasmid Reference")
 
   val prefix = "test/"
 }
@@ -21,17 +21,17 @@ object TestData{
  * @param elem html element
  * @param params view params (if any)
  */
-class MenuView(val elem:HTMLElement, val params:Map[String,Any] = Map.empty) extends CollectionView
+class MenuView(val elem: HTMLElement, val params: Map[String, Any] = Map.empty) extends CollectionView
 {
 
   override def activateMacro(): Unit = { extractors.foreach(_.extractEverything(this))}
 
-  override protected def attachBinders(): Unit =withBinders(BindableView.defaultBinders(this))
+  override protected def attachBinders(): Unit = withBinders(BindableView.defaultBinders(this))
 
   override type Item = String
 
-  override def newItem(item: Item) = this.constructItem(item){ case (el,mp)=> //TODO: rename constructItem to smt like ConstructItemView
-    new MenuItem(el,item,mp)
+  override def newItem(item: Item): ItemView = this.constructItem(item){ case (el, mp)=> // TODO: rename constructItem to smt like ConstructItemView
+    new MenuItem(el, item, mp)
   }
 
   override type ItemView = MenuItem
@@ -43,10 +43,10 @@ class MenuView(val elem:HTMLElement, val params:Map[String,Any] = Map.empty) ext
 
 }
 
-class MenuItem(val elem:HTMLElement,value:String, val params:Map[String,Any] = Map.empty) extends BindableView{
+class MenuItem(val elem: HTMLElement, value: String, val params: Map[String, Any] = Map.empty) extends BindableView{
 
   val label: Var[String] = Var(value)
-  val uri: Rx[String] = label.map(l=>TestData.prefix+l.replace(" ","_"))
+  val uri: Rx[String] = label.map(l => TestData.prefix + l.replace(" ", "_"))
 
 
   override def activateMacro(): Unit = { extractors.foreach(_.extractEverything(this))}

@@ -16,27 +16,23 @@ class MainActor  extends Actor with ActorLogging // Routes
   implicit val materializer = ActorFlowMaterializer()
   implicit val executionContext = system.dispatcher
 
-
   val server: HttpExt = Http(context.system)
-  var serverSource: Source[IncomingConnection, Future[ServerBinding]] = null
+  var serverSource: Source[IncomingConnection, Future[ServerBinding]] = null  // scalastyle:ignore
   val router = new Router()
-
-
-
 
   override def receive: Receive = {
     case AppMessages.Start(config)=>
-      val (host,port) = (config.getString("app.host") , config.getInt("app.port"))
+      val (host, port) = (config.getString("app.host"), config.getInt("app.port"))
       server.bindAndHandle(router.routes, host, port)
 
     case AppMessages.Stop=> onStop()
   }
 
-  def onStop() = {
+  def onStop(): Unit = {
     log.info("Main actor has been stoped...")
   }
 
-  override def postStop() = {
+  override def postStop(): Unit = {
     onStop()
   }
 

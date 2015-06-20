@@ -20,7 +20,7 @@ import scala.util.Try
 object FrontEnd extends BindableView with scalajs.js.JSApp
 {
 
-  override def name = "main"
+  override def name: String = "main"
 
 
   val hello = Var("HELLO WORLD!")
@@ -39,21 +39,21 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
    * Register views
    */
   ViewInjector
-    .register("menu", (el, params) =>Try(new MenuView(el,params)))
-    .register("sidebar", (el, params) =>Try(new SidebarView(el,params)))
-    .register("login", (el, params) =>Try(new LoginView(el,params)))
+    .register("menu", (el, params) => Try(new MenuView(el, params)))
+    .register("sidebar", (el, params) => Try(new SidebarView(el, params)))
+    .register("login", (el, params) => Try(new LoginView(el, params)))
 
   @JSExport
   def main(): Unit = {
     this.bindView(this.viewElement)
-    this.login("guest") //TODO: change it when session mechanism will work well
+    this.login("guest") // TODO: change it when session mechanism will work well
   }
 
   @JSExport
-  def login(username:String): Unit = Session.login(username)
+  def login(username: String): Unit = Session.login(username)
 
   @JSExport
-  def showLeftSidebar() = {
+  def showLeftSidebar(): Unit = {
     $(".left.sidebar").dyn.sidebar(sidebarParams).sidebar("show")
   }
 
@@ -77,7 +77,7 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
     extractors.foreach(_.extractEverything(this))
   }
 
-  def attachBinders() = {
+  def attachBinders(): Unit = {
     this.binders = BindableView.defaultBinders(this)
   }
 }

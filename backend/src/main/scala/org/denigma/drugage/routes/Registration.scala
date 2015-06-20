@@ -7,47 +7,46 @@ import akka.http.extensions.security._
 import scala.concurrent.Future
 
 class Registration(
-                    usernameLogin:(String,String)=>Future[LoginResult],
-                    emailLogin:(String,String)=>Future[LoginResult],
-                    register:(String,String,String)=>Future[RegistrationResult],
-                    getToken:String=>Future[String]
+                    usernameLogin: (String, String) => Future[LoginResult],
+                    emailLogin: (String, String) => Future[LoginResult],
+                    register: (String, String, String) => Future[RegistrationResult],
+                    getToken: String => Future[String]
                     ) extends AuthDirectives
                   with Directives
                   with WithLoginRejections
                   with WithRegistrationRejections
 {
-
-
+  private[this] val tokenCookieName = "token"
 
   def routes: Route =
     pathPrefix("users") {
-        pathPrefix("login") {
-          handleRejections(loginRejectionHandlers){
-            withLogin(usernameLogin,emailLogin) { user=>
-                withSession(user.username, getToken) { token =>
-                  setCookie(HttpCookie("token", content = token)) {
-                    complete(s"The user ${user.username} was logged in")
-                }
+      pathPrefix("login") {
+        handleRejections(loginRejectionHandlers){
+          withLogin(usernameLogin, emailLogin) { user =>
+            withSession(user.username, getToken) { token =>
+              setCookie(HttpCookie(tokenCookieName, content = token)) {
+                complete(s"The user ${user.username} was logged in")
               }
             }
           }
-        }~
+        }
+      } ~
       pathPrefix("register"){
         handleRejections(registerRejectionHandlers){
-          withRegistration(register) {  user=>
+          withRegistration(register) { user=>
             withSession(user.username, getToken) { token =>
-              setCookie(HttpCookie("token", content = token)) {
+              setCookie(HttpCookie(tokenCookieName, content = token)) {
                 complete(s"The user ${user.username} has been registered")
               }
             }
           }
         }
-      }~
+      } ~
       pathPrefix("logout"){
-          deleteCookie("token") {
-            complete(s"the user has been logged out!")
-          }
+        deleteCookie(tokenCookieName) {
+          complete(s"the user has been logged out!")
         }
       }
+    }
 }
 
