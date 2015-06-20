@@ -12,22 +12,22 @@ import com.typesafe.sbt.web.SbtWeb.autoImport._
 
 object Build extends sbt.Build {
   
-	//settings for all the projects
+	// settings for all the projects
 	lazy val commonSettings = Seq(
     scalaVersion := Versions.scala,
 	  organization := "org.denigma",
-		resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), //for scala-js-binding
+		resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), // for scala-js-binding
     libraryDependencies ++= Dependencies.commonShared.value++Dependencies.testing.value,
-		updateOptions := updateOptions.value.withCachedResolution(true), //to speed up dependency resolution
-		scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature")
+		updateOptions := updateOptions.value.withCachedResolution(true), // to speed up dependency resolution
+		scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature", "-language:implicitConversions")
   )
 
-	//sbt-native-packager settings to run it as daemon
+	// sbt-native-packager settings to run it as daemon
 	lazy val packageSettings = Seq(
 		maintainer := "Anton Kulaga <antonkulaga@gmail.com>",
 		packageSummary:= "DrugAge database prototype",
 		packageDescription := "DrugAge database prototype"
-		//serverLoading in Debian := Upstart
+		// serverLoading in Debian := Upstart
 	)
 
 	lazy val frontend = crossProject
@@ -42,11 +42,11 @@ object Build extends sbt.Build {
 		libraryDependencies ++= Dependencies.sjsLibs.value++Dependencies.templates.value
 )
 
-	lazy val frontendJVM = frontend.jvm //what frontend requires from the backend
-	lazy val frontendJS = frontend.js //all scalajs code is here
+	lazy val frontendJVM = frontend.jvm // what frontend requires from the backend
+	lazy val frontendJS = frontend.js // all scalajs code is here
 
 
-	//backend project
+	// backend project
 	lazy val backend = Project("backend", file("backend"),settings = commonSettings++Revolver.settings)
 		.settings(packageSettings:_*)
 		.settings(
@@ -63,6 +63,6 @@ object Build extends sbt.Build {
 		.settings(
 			mainClass in Compile := (mainClass in backend in Compile).value,
 			libraryDependencies += "com.lihaoyi" % "ammonite-repl" % Versions.ammonite cross CrossVersion.full,
-			initialCommands in console := """ammonite.repl.Repl.run("")""" //better console
+			initialCommands in console := """ammonite.repl.Repl.run("")""" // better console
     ) dependsOn backend aggregate(backend,frontendJS)
 }

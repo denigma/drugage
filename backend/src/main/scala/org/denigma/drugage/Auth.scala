@@ -15,4 +15,4 @@ trait Auth {
 
 }
 
-case class User(user:String,pass:String)
+case class User(user: String, pass: String)

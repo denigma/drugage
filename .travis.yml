@@ -9,6 +9,7 @@ cache:
 
 script:
   # Your normal script
+  - sbt -J-XX:ReservedCodeCacheSize=256M scalastyle
   - sbt -J-XX:ReservedCodeCacheSize=256M test
 
   # Tricks to avoid unnecessary cache updates

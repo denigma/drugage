@@ -12,7 +12,7 @@ object Main extends App
   sys.addShutdownHook(system.shutdown())
 
   val config: Config = system.settings.config
-  var main:ActorRef = system.actorOf(Props[MainActor])
+  var main: ActorRef = system.actorOf(Props[MainActor])
   main ! AppMessages.Start(config)
 
 }
