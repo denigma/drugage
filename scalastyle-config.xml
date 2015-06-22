@@ -38,7 +38,7 @@
  </check>
  <check level="error" class="org.scalastyle.scalariform.ParameterNumberChecker" enabled="true">
   <parameters>
-   <parameter name="maxParameters"><![CDATA[8]]></parameter>
+   <parameter name="maxParameters"><![CDATA[10]]></parameter>
   </parameters>
  </check>
  <check level="error" class="org.scalastyle.scalariform.MagicNumberChecker" enabled="true">
@@ -118,7 +118,7 @@
       <parameter name="tokens">COLON, IF, COMMA</parameter>
      </parameters>
     </check>
-    <check enabled="true" class="org.scalastyle.scalariform.FieldNamesChecker" level="error">
+    <check enabled="false" class="org.scalastyle.scalariform.FieldNamesChecker" level="error">
      <parameters>
       <parameter name="regex">^[(a-z][A-Za-z0-9),]*$</parameter>
      </parameters>
