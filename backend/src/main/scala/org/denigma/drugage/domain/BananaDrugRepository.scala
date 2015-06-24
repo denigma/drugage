@@ -10,11 +10,7 @@ import squants.time.Time
 import org.denigma.drugage.domain.aux.DrugsNS
 
 class BananaDrugRepository[Rdf <: RDF, Connection](connection: Connection)
-  (implicit
-    private[this] val rdfOps: RDFOps[Rdf],
-    private[this] val rdfStore: RDFStore[Rdf, Try, Connection],
-    private[this] val sparqlOps: SparqlOps[Rdf],
-    private[this] val recordBinder: RecordBinder[Rdf])
+  (implicit rdfOps: RDFOps[Rdf], rdfStore: RDFStore[Rdf, Try, Connection], sparqlOps: SparqlOps[Rdf], recordBinder: RecordBinder[Rdf])
   extends DrugRepository {
 
   import rdfOps._
