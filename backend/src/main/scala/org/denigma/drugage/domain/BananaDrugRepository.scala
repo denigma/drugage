@@ -144,6 +144,8 @@ class BananaDrugRepository[Rdf <: RDF, Connection](connection: Connection)
     }
   }
 
+  override def getBySpecification(spec: DrugSpecification): Seq[Drug] = Seq()
+
   override def delete(id: DrugId): Unit = {
     rdfStore.removeGraph(connection, drugsNS.drugs / id)
   }
