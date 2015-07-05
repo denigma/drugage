@@ -8,7 +8,7 @@ object Versions extends WebJarsVersions with ScalaJSVersions with RdfVersions wi
 
 	val akkaHttpExtensions = "0.0.1"
 
-	val scalatest = "3.0.0-M2"
+	val scalatest = "3.0.0-M5"
 
 }
 

@@ -3,7 +3,7 @@ package org.denigma.drugage.domain.aux
 import org.w3.banana.{Prefix, RDFOps, RDF}
 
 case class DrugsNS[Rdf <: RDF: RDFOps]() {
-  private[this] val ns: Prefix[Rdf] = Prefix[Rdf]("drugsage", "https://denigma.org")
+  private[this] val ns: Prefix[Rdf] = Prefix[Rdf]("drugsage", "https://denigma.org/")
 
   def apply(name: String): Rdf#URI = ns(name)
 

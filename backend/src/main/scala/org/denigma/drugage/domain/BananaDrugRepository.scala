@@ -144,7 +144,52 @@ class BananaDrugRepository[Rdf <: RDF, Connection](connection: Connection)
     }
   }
 
-  override def getBySpecification(spec: DrugSpecification): Seq[Drug] = Seq()
+  private[this] def specToBindings(spec: DrugSpecification): Map[String, Rdf#Node] = {
+    val nameClause = spec.compoundName.map("name" -> _.toNode)
+    val idClause = spec.id.map("drug_id" -> _.toNode)
+    val pubmedIdClause = spec.pubmedId.map("pubmed_id" -> _.toNode)
+    val specieClause = spec.organism.specie.map("specie" -> _.toNode)
+    val strainClause = spec.organism.strain.map("strain" -> _.toNode)
+    val genderClause = spec.organism.gender.map("gender" -> _.toString.toNode)
+    Seq(nameClause, idClause, pubmedIdClause, specieClause, strainClause, genderClause).collect {case Some(binding) => binding}.toMap
+  }
+
+  private[this] val constructQuery = sparqlOps.parseConstruct(
+    """
+      |PREFIX drugsage: <https://denigma.org/>
+      |
+      |CONSTRUCT {
+      |  ?drug ?p ?o.
+      |  ?organism ?orgp ?orgo.
+      |  ?span ?spanp ?spano
+      |} WHERE {
+      |  ?drug ?p ?o;
+      |        drugsage:organism ?organism;
+      |        drugsage:lifespan_change ?span;
+      |        drugsage:compound_name ?name;
+      |        drugsage:drug_id ?drug_id;
+      |        drugsage:pubmed_id ?pubmed_id.
+      |  ?organism ?orgp ?orgo;
+      |            drugsage:specie ?specie;
+      |            drugsage:strain ?strain;
+      |            drugsage:gender ?gender.
+      |  ?span ?spanp ?spano.
+      |}
+    """.stripMargin).get
+
+
+  override def get(spec: DrugSpecification): Seq[Drug] = {
+    val graph = rdfStore.executeConstruct(connection, constructQuery, specToBindings(spec)).get
+
+    val results = graph.triples.collect { case Triple(depositor, drugsNS.drugId, _) =>
+      val pg = PointedGraph(depositor, graph)
+      pg.as[Drug].get
+    }.toSeq
+
+    assert(results.forall(spec.satisfiedBy))
+
+    results
+  }
 
   override def delete(id: DrugId): Unit = {
     rdfStore.removeGraph(connection, drugsNS.drugs / id)
