@@ -12,16 +12,17 @@ class Head extends Directives
   lazy val webjarsPrefix = "lib"
   lazy val resourcePrefix = "resources"
 
-  def mystyles: Route = path("styles" / "mystyles.css"){
+  def mystyles =    path("styles" / "mystyles.css"){
     complete  {
-      HttpResponse(entity = HttpEntity(MediaTypes.`text/css`, MyStyles.render))}
-  }
+      HttpResponse(  entity = HttpEntity(MediaTypes.`text/css`,  MyStyles.render   ))   }
+    }
 
-  def loadResources: Route = pathPrefix(resourcePrefix~Slash) {
+  def loadResources = pathPrefix(resourcePrefix~Slash) {
     getFromResourceDirectory("")
   }
 
-  def webjars: Route = pathPrefix(webjarsPrefix ~ Slash) {getFromResourceDirectory(webjarsPrefix)}
+
+  def webjars =pathPrefix(webjarsPrefix ~ Slash)  {  getFromResourceDirectory(webjarsPrefix)  }
 
   def routes: Route = mystyles ~ webjars ~ loadResources
 }

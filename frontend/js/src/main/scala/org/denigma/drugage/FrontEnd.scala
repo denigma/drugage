@@ -3,7 +3,7 @@ package org.denigma.drugage
 import org.denigma.binding.extensions._
 import org.denigma.binding.views.BindableView
 import org.denigma.binding.views.utils.ViewInjector
-import org.denigma.controls.login.{Session, LoginView}
+import org.denigma.controls.login.{AjaxSession, Session, LoginView}
 import org.denigma.drugage.views.{SidebarView, MenuView}
 import org.querki.jquery._
 import org.scalajs.dom
@@ -20,8 +20,7 @@ import scala.util.Try
 object FrontEnd extends BindableView with scalajs.js.JSApp
 {
 
-  override def name: String = "main"
-
+  override def name = "main"
 
   val hello = Var("HELLO WORLD!")
 
@@ -35,25 +34,28 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
     closable = false,
     useLegacy = false
   )
+
+  val session = new AjaxSession
+
   /**
    * Register views
    */
   ViewInjector
-    .register("menu", (el, params) => Try(new MenuView(el, params)))
-    .register("sidebar", (el, params) => Try(new SidebarView(el, params)))
-    .register("login", (el, params) => Try(new LoginView(el, params)))
+    .register("menu", (el, params) =>Try(new MenuView(el,params)))
+    .register("sidebar", (el, params) =>Try(new SidebarView(el,params)))
+    .register("login", (el, params) =>Try(new LoginView(el,session,params)))
 
   @JSExport
   def main(): Unit = {
     this.bindView(this.viewElement)
-    this.login("guest") // TODO: change it when session mechanism will work well
+    this.login("guest") //TODO: change it when session mechanism will work well
   }
 
   @JSExport
-  def login(username: String): Unit = Session.login(username)
+  def login(username:String): Unit = session.setUsername(username)
 
   @JSExport
-  def showLeftSidebar(): Unit = {
+  def showLeftSidebar() = {
     $(".left.sidebar").dyn.sidebar(sidebarParams).sidebar("show")
   }
 
@@ -77,7 +79,7 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
     extractors.foreach(_.extractEverything(this))
   }
 
-  def attachBinders(): Unit = {
+  def attachBinders() = {
     this.binders = BindableView.defaultBinders(this)
   }
 }
