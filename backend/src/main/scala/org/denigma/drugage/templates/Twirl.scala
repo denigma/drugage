@@ -1,4 +1,4 @@
-package org.denigma.drugage.routes
+package org.denigma.drugage.templates
 
 import akka.http.extensions.pjax.{PJaxMagnet, TemplateEngine}
 import akka.http.scaladsl.server.Directive
@@ -13,7 +13,7 @@ class Twirl extends TemplateEngine{
 import play.twirl.api.Html
 
 object Twirl{
-  implicit def apply(params: (Html, Html => Html)): PJaxMagnet[Twirl] =
+  implicit def apply(params:(Html,Html=>Html)):PJaxMagnet[Twirl] =
     PJaxMagnet[Twirl](
       Directive[Tuple1[Html]] { inner ⇒ ctx ⇒
         val (html, transform) = params
@@ -22,4 +22,6 @@ object Twirl{
         else
           inner(Tuple1(transform(html)))(ctx)
     })
+
+
 }

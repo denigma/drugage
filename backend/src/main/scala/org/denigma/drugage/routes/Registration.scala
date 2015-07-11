@@ -1,52 +1,56 @@
 package org.denigma.drugage.routes
 
-import akka.http.scaladsl.model.headers.HttpCookie
-import akka.http.scaladsl.server._
 import akka.http.extensions.security._
+import akka.http.scaladsl.server.{Directives, _}
 
 import scala.concurrent.Future
 
 class Registration(
-                    usernameLogin: (String, String) => Future[LoginResult],
-                    emailLogin: (String, String) => Future[LoginResult],
-                    register: (String, String, String) => Future[RegistrationResult],
-                    getToken: String => Future[String]
+                    usernameLogin:(String,String)=>Future[LoginResult],
+                    emailLogin:(String,String)=>Future[LoginResult],
+                    register:(String,String,String)=>Future[RegistrationResult],
+                    userByToken:String=>Option[LoginInfo],
+                    makeToken:LoginInfo=>Future[String]
                     ) extends AuthDirectives
-                  with Directives
-                  with WithLoginRejections
-                  with WithRegistrationRejections
+with Directives
+with WithLoginRejections
+with WithRegistrationRejections
 {
-  private[this] val tokenCookieName = "token"
-
   def routes: Route =
     pathPrefix("users") {
       pathPrefix("login") {
-        handleRejections(loginRejectionHandlers){
-          withLogin(usernameLogin, emailLogin) { user =>
-            withSession(user.username, getToken) { token =>
-              setCookie(HttpCookie(tokenCookieName, content = token)) {
+        put {
+          handleRejections(loginRejectionHandlers) {
+            login(usernameLogin, emailLogin) { user =>
+              startSession(user, makeToken) {
                 complete(s"The user ${user.username} was logged in")
               }
             }
           }
         }
       } ~
-      pathPrefix("register"){
-        handleRejections(registerRejectionHandlers){
-          withRegistration(register) { user=>
-            withSession(user.username, getToken) { token =>
-              setCookie(HttpCookie(tokenCookieName, content = token)) {
-                complete(s"The user ${user.username} has been registered")
+        pathPrefix("register") {
+          put {
+            handleRejections(registerRejectionHandlers) {
+              registration(register) { user =>
+                startSession(user, makeToken) {
+                  complete(s"The user ${user.username} has been registered")
+                }
               }
             }
           }
-        }
-      } ~
-      pathPrefix("logout"){
-        deleteCookie(tokenCookieName) {
-          complete(s"the user has been logged out!")
-        }
-      }
+        } ~
+        pathPrefix("logout") {
+          deleteCookie("X-Token",path="/") { c =>
+            c.complete(s"The user was logged out")
+          }
+        } ~
+        pathPrefix("status"){
+          this.authenticate(userByToken){user=>
+            complete(user.username)
+          }         }
     }
 }
+
+
 
