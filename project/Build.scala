@@ -48,7 +48,6 @@ object Build extends sbt.Build {
 	lazy val frontendJVM = frontend.jvm // what frontend requires from the backend
 	lazy val frontendJS = frontend.js // all scalajs code is here
 
-
 	// backend project
 	lazy val backend = Project("backend", file("backend"),settings = commonSettings++Revolver.settings)
 		.settings(packageSettings:_*)
@@ -56,7 +55,8 @@ object Build extends sbt.Build {
 			libraryDependencies ++=
 				Dependencies.akka.value ++
 				Dependencies.webjars.value ++
-				Dependencies.rdf.value,
+				Dependencies.rdf.value ++
+				Dependencies.otherJVM.value,
 			mainClass in Compile :=Some("org.denigma.drugage.Main"),
 			mainClass in Revolver.reStart := Some("org.denigma.drugage.Main"),
 			resourceGenerators in Compile <+=  (fastOptJS in Compile in frontendJS,

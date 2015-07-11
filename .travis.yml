@@ -1,5 +1,11 @@
 language: scala
 
+jdk:
+  - oraclejdk8
+
+scala:
+  - 2.11.7
+
 sudo: false
 
 cache:
@@ -7,9 +13,12 @@ cache:
     - $HOME/.ivy2/cache
     - $HOME/.sbt/boot/
 
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
 script:
   # Your normal script
-  - sbt -J-XX:ReservedCodeCacheSize=256M scalastyle
   - sbt -J-XX:ReservedCodeCacheSize=256M test
 
   # Tricks to avoid unnecessary cache updates

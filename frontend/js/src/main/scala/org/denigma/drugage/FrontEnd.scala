@@ -10,11 +10,11 @@ import org.scalajs.dom
 import org.scalajs.dom.raw.HTMLElement
 import rx.core.Var
 
+import scala.Predef
 import scala.collection.immutable.Map
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 import scala.util.Try
-
 
 @JSExport("FrontEnd")
 object FrontEnd extends BindableView with scalajs.js.JSApp
@@ -35,7 +35,7 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
     useLegacy = false
   )
 
-  val session = new AjaxSession
+  val session = new AjaxSession()
 
   /**
    * Register views

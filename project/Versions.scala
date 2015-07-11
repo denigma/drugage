@@ -4,9 +4,9 @@ object Versions extends WebJarsVersions with ScalaJSVersions with RdfVersions wi
 
 	val akkaHttp = "1.0-RC4"
 
-	val ammonite = "0.3.0"
+	val ammonite = "0.3.2"
 
-	val akkaHttpExtensions = "0.0.5-RC4"
+	val akkaHttpExtensions = "0.0.5-1-RC4"
 
 	val scalatest = "3.0.0-M6"
 
@@ -35,15 +35,15 @@ trait SharedVersions
 
 	val utest = "0.3.1"
 
-	val bindingControls = "0.0.4"
+	val bindingControls = "0.0.5"
 
 }
 
 trait WebJarsVersions {
 
-	val jquery =  "2.1.3"
+	val jquery =  "2.1.4"
 
-	val semanticUI = "2.0.0"
+	val semanticUI = "2.0.2"
 
 	val selectize = "0.12.1"
 

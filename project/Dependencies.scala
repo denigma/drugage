@@ -33,20 +33,20 @@ object Dependencies {
 	lazy val shared = Def.setting(Seq(
 		"com.softwaremill.quicklens" %%% "quicklens" % Versions.quicklens, // nice lenses for case classes
 
-	  "com.squants"  %% "squants"  % "0.5.3",	// library for modelling physical quantities
+		"com.squants"  %% "squants"  % "0.5.3",	//TODO: move away
 
-		"org.denigma" %%% "binding-controls" % Versions.bindingControls,
-
-		"com.github.japgolly.scalacss" %%% "core" % Versions.scalaCSS,
-
-		"com.github.japgolly.scalacss" %%% "ext-scalatags" % Versions.scalaCSS
+		"org.denigma" %%% "binding-controls" % Versions.bindingControls
 
 	))
 
-	lazy val rdf = Def.setting(Seq(
+	lazy val rdf= Def.setting(Seq(
 		//"org.w3" %% "banana-bigdata" % Versions.bananaBigdata excludeAll ExclusionRule(organization = "com.github.inthenow"),
 
 		"org.w3" %% "banana-sesame" % Versions.bananaRdf
+	))
+
+	lazy val otherJVM: Def.Initialize[Seq[ModuleID]]  = Def.setting(Seq(
+		//"com.squants"  %% "squants"  % "0.5.3"	// library for modelling physical quantities
 	))
 
 }
