@@ -25,7 +25,9 @@ class MainActor  extends Actor with ActorLogging // Routes
   override def receive: Receive = {
     case AppMessages.Start(config)=>
       val (host,port) = (config.getString("app.host") , config.getInt("app.port"))
+      log.info(s"starting server at $host:$port")
       server.bindAndHandle(router.routes, host, port)
+
 
     case AppMessages.Stop=> onStop()
   }
