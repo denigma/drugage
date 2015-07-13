@@ -2,12 +2,13 @@ package org.denigma.drugage.domain
 
 import scala.util.{Failure, Success, Try}
 
-import org.w3.banana.binder.{FromPG, ToPG, PGBinder, FromLiteral, ToLiteral, RecordBinder}
+import org.w3.banana.binder.{FromLiteral, FromPG, PGBinder, RecordBinder, ToLiteral, ToPG}
 import org.w3.banana.{FailedConversion, PointedGraph, RDF, RDFOps, RDFStore, SparqlOps}
 import squants.motion.MassFlow
 import squants.time.Time
 
 import org.denigma.drugage.domain.aux.DrugsNS
+import DrugSpecificationOps._
 
 class BananaDrugRepository[Rdf <: RDF, Connection](connection: Connection)
   (implicit rdfOps: RDFOps[Rdf], rdfStore: RDFStore[Rdf, Try, Connection], sparqlOps: SparqlOps[Rdf], recordBinder: RecordBinder[Rdf])
