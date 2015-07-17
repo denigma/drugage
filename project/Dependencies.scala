@@ -18,7 +18,9 @@ object Dependencies {
 
 	// scalajs libs
 	lazy val sjsLibs= Def.setting(Seq(
-		"org.querki" %%% "jquery-facade" % Versions.jqueryFacade //scalajs facade for jQuery + jQuery extensions
+		"org.querki" %%% "jquery-facade" % Versions.jqueryFacade, //scalajs facade for jQuery + jQuery extensions
+
+		"org.denigma" %%% "semantic-ui-facade" % Versions.semanticUIFacade
 	))
 
 	// dependencies on javascript libs
@@ -33,7 +35,7 @@ object Dependencies {
 	lazy val shared = Def.setting(Seq(
 		"com.softwaremill.quicklens" %%% "quicklens" % Versions.quicklens, // nice lenses for case classes
 
-		"com.squants"  %% "squants"  % "0.5.3",	//TODO: move away
+		"com.squants"  %% "squants"  % Versions.squants,
 
 		"org.denigma" %%% "binding-controls" % Versions.bindingControls
 
@@ -46,7 +48,6 @@ object Dependencies {
 	))
 
 	lazy val otherJVM: Def.Initialize[Seq[ModuleID]]  = Def.setting(Seq(
-		//"com.squants"  %% "squants"  % "0.5.3"	// library for modelling physical quantities
 	))
 
 }

@@ -6,6 +6,7 @@ import org.denigma.drugage.views.stubs.WithDomain
 import org.querki.jquery._
 import org.scalajs.dom.raw.HTMLElement
 import rx._
+import org.semantic.ui._
 /**
  * View for the sidebar
  */
@@ -17,7 +18,7 @@ class SidebarView (val elem: HTMLElement, val params: Map[String, Any] = Map.emp
 
   override def bindElement(el: HTMLElement): Unit = {
     super.bindElement(el)
-    $(".ui.accordion").dyn.accordion()
+    $(".ui.accordion").accordion()
   }
 
   override protected def attachBinders(): Unit =  binders = BindableView.defaultBinders(this)
