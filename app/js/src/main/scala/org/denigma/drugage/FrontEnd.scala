@@ -8,6 +8,7 @@ import org.denigma.drugage.views.{SidebarView, MenuView}
 import org.querki.jquery._
 import org.scalajs.dom
 import org.scalajs.dom.raw.HTMLElement
+import org.semantic.SidebarConfig
 import rx.core.Var
 
 import scala.Predef
@@ -15,6 +16,7 @@ import scala.collection.immutable.Map
 import scala.scalajs.js
 import scala.scalajs.js.annotation.JSExport
 import scala.util.Try
+import org.semantic.ui._
 
 @JSExport("FrontEnd")
 object FrontEnd extends BindableView with scalajs.js.JSApp
@@ -28,12 +30,7 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
 
   override val params: Map[String, Any] = Map.empty
 
-  val sidebarParams = js.Dynamic.literal(
-    exclusive = false,
-    dimPage = false,
-    closable = false,
-    useLegacy = false
-  )
+  val sidebarParams = SidebarConfig.exclusive(false).dimPage(false).closable(false).useLegacy(false)
 
   val session = new AjaxSession()
 
@@ -56,7 +53,7 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
 
   @JSExport
   def showLeftSidebar() = {
-    $(".left.sidebar").dyn.sidebar(sidebarParams).sidebar("show")
+    $(".left.sidebar").sidebar(sidebarParams).show()
   }
 
   @JSExport

@@ -15,7 +15,8 @@ object Build extends sbt.Build {
     scalaVersion := Versions.scala,
 	  organization := "org.denigma",
 		resolvers += sbt.Resolver.bintrayRepo("denigma", "denigma-releases"), // for scala-js-binding
-    libraryDependencies ++= Dependencies.shared.value++Dependencies.testing.value,
+		resolvers += sbt.Resolver.bintrayRepo("rmihael", "maven"), // for
+		libraryDependencies ++= Dependencies.shared.value++Dependencies.testing.value,
 		updateOptions := updateOptions.value.withCachedResolution(true), // to speed up dependency resolution
 		scalacOptions in ThisBuild ++= Seq("-unchecked", "-deprecation", "-feature", "-language:implicitConversions")
   )

@@ -40,16 +40,15 @@ with WithRegistrationRejections
             }
           }
         } ~
-        pathPrefix("logout") {
-          deleteCookie("X-Token",path="/") { c =>
+        logout { c =>
             c.complete(s"The user was logged out")
           }
         } ~
         pathPrefix("status"){
           this.authenticate(userByToken){user=>
             complete(user.username)
-          }         }
-    }
+          }
+      }
 }
 
 
