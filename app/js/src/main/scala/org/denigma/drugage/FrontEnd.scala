@@ -18,7 +18,7 @@ import scala.scalajs.js.annotation.JSExport
 object FrontEnd extends BindableView with scalajs.js.JSApp
 {
 
-  override def name = "main"
+  override def name: String = "main"
 
   lazy val elem: HTMLElement = dom.document.body
 
@@ -31,27 +31,27 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
   /**
    * Register views
    */
-  override lazy val injector = defaultInjector
-    .register("menu"){
-      case (el, args) =>
-        new MenuView(el,args).withBinders(menu=>List(new GeneralBinder(menu),new NavigationBinding(menu)))
-    }
-    .register("sidebar"){ case (el, args) => new SidebarView(el,args).withBinder(new GeneralBinder(_)) }
-    .register("login"){ case (el, args) => new LoginView(el,session,args).withBinder(new GeneralBinder(_)) }
+  override lazy val injector = defaultInjector.register("menu")
+  {
+    case (el, args) =>
+      new MenuView(el, args).withBinders(menu=>List(new GeneralBinder(menu), new NavigationBinding(menu)))
+  }
+  .register("sidebar"){ case (el, args) => new SidebarView(el, args).withBinder(new GeneralBinder(_)) }
+  .register("login"){ case (el, args) => new LoginView(el, session, args).withBinder(new GeneralBinder(_)) }
 
   this.withBinder(new GeneralBinder(_))
 
   @JSExport
   def main(): Unit = {
     this.bindView(this.viewElement)
-    this.login("guest") //TODO: change it when session mechanism will work well
+    this.login("guest") // TODO: change it when session mechanism will work well
   }
 
   @JSExport
-  def login(username:String): Unit = session.setUsername(username)
+  def login(username: String): Unit = session.setUsername(username)
 
   @JSExport
-  def showLeftSidebar() = {
+  protected def showLeftSidebar() = {
     $(".left.sidebar").sidebar(sidebarParams).show()
   }
 

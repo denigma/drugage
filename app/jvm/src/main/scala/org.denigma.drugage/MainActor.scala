@@ -1,14 +1,9 @@
 package org.denigma.drugage
 
 import akka.actor._
-import akka.http.scaladsl.Http.{IncomingConnection, ServerBinding}
 import akka.http.scaladsl.{Http, _}
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.Source
 import org.denigma.drugage.routes.Router
-
-
-import scala.concurrent.Future
 
 class MainActor  extends Actor with ActorLogging // Routes
 {
@@ -16,11 +11,8 @@ class MainActor  extends Actor with ActorLogging // Routes
   implicit val materializer = ActorMaterializer()
   implicit val executionContext = system.dispatcher
 
-
   val server: HttpExt = Http(context.system)
-  var serverSource: Source[IncomingConnection, Future[ServerBinding]] = null
-  val router = new Router()
-
+  val router: Router = new Router()
 
   override def receive: Receive = {
     case AppMessages.Start(config)=>
@@ -28,15 +20,14 @@ class MainActor  extends Actor with ActorLogging // Routes
       log.info(s"starting server at $host:$port")
       server.bindAndHandle(router.routes, host, port)
 
-
     case AppMessages.Stop=> onStop()
   }
 
-  def onStop() = {
+  def onStop(): Unit = {
     log.info("Main actor has been stoped...")
   }
 
-  override def postStop() = {
+  override def postStop(: Unit  = {
     onStop()
   }
 

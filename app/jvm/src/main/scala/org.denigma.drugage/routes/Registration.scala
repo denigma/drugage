@@ -6,11 +6,11 @@ import akka.http.scaladsl.server.{Directives, _}
 import scala.concurrent.Future
 
 class Registration(
-                    usernameLogin:(String,String)=>Future[LoginResult],
-                    emailLogin:(String,String)=>Future[LoginResult],
-                    register:(String,String,String)=>Future[RegistrationResult],
-                    userByToken:String=>Option[LoginInfo],
-                    makeToken:LoginInfo=>Future[String]
+                    usernameLogin: (String, String)=>Future[LoginResult],
+                    emailLogin: (String, String)=>Future[LoginResult],
+                    register: (String, String, String)=>Future[RegistrationResult],
+                    userByToken: String=>Option[LoginInfo],
+                    makeToken: LoginInfo=>Future[String]
                     ) extends AuthDirectives
 with Directives
 with WithLoginRejections
