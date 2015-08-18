@@ -1,14 +1,25 @@
+import com.typesafe.sbt.web.pipeline.Pipeline
+import playscalajs.{PlayScalaJS,ScalaJSPlay}
+import playscalajs.PlayScalaJS.autoImport._
 import com.typesafe.sbt.SbtNativePackager.autoImport._
-import com.typesafe.sbt.web.SbtWeb
+import com.typesafe.sbt.gzip.Import._
+import com.typesafe.sbt.web.{PathMapping, SbtWeb}
 import com.typesafe.sbt.web.SbtWeb.autoImport._
 import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
 import play.twirl.sbt._
 import sbt.Keys._
 import sbt._
 import spray.revolver.RevolverPlugin._
-
+import com.typesafe.sbt.gzip.Import.gzip
 
 object Build extends sbt.Build {
+
+
+	val scalaJSDevStage  = Def.taskKey[Pipeline.Stage]("Apply fastOptJS on all Scala.js projects")
+
+	def scalaJSDevTaskStage: Def.Initialize[Task[Pipeline.Stage]] = Def.task { mappings: Seq[PathMapping] =>
+		mappings ++ PlayScalaJS.devFiles(Compile).value ++ PlayScalaJS.sourcemapScalaFiles(fastOptJS).value
+	}
   
 	// settings for all the projects
 	lazy val commonSettings = Seq(
@@ -43,6 +54,7 @@ object Build extends sbt.Build {
 			jsDependencies += RuntimeDOM % "test",
 			libraryDependencies ++= Dependencies.sjsLibs.value
 		)
+		.jsConfigure(p=>p.enablePlugins(ScalaJSPlay))
 		.jvmConfigure(p=>p.enablePlugins(SbtTwirl,SbtWeb))
 		.jvmSettings(Revolver.settings:_*)
 		.jvmSettings(
@@ -58,16 +70,15 @@ object Build extends sbt.Build {
 			resolvers += "nxparser-repo" at "http://nxparser.googlecode.com/svn/repository/",
 			dependencyOverrides += "org.apache.lucene" % "lucene-core" % Versions.bigdataLuceneVersion, //bigdata uses outdated lucene :_(
 			dependencyOverrides += "org.apache.lucene" % "lucene-analyzers" % Versions.bigdataLuceneVersion, //bigdata uses outdated lucene
-			(managedClasspath in Runtime) += (packageBin in Assets).value,
-resourceGenerators in Compile <+=
-				(fastOptJS in Compile in "drugAgeJS",	packageScalaJSLauncher in Compile in "drugAgeJS") map(
-					(f1, f2) => Seq(f1.data, f2.data)
-					),
-			watchSources <++= (watchSources in "drugAgeJS")
+			scalaJSDevStage := scalaJSDevTaskStage.value,
+			//pipelineStages := Seq(scalaJSProd,gzip),
+			(emitSourceMaps in fullOptJS) := true,
+			pipelineStages in Assets := Seq(scalaJSDevStage,gzip), //for run configuration
+			(managedClasspath in Runtime) += (packageBin in Assets).value //to package production deps
 		)
 
 	lazy val drugAgeJS = drugAge.js
-	lazy val drugAgeJVM = drugAge.jvm
+	lazy val drugAgeJVM = drugAge.jvm settings( scalaJSProjects := Seq(drugAgeJS))
 
 	lazy val root = Project("root",file("."),settings = commonSettings)
 		.settings(
