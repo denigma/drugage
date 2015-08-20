@@ -5,7 +5,7 @@ import akka.http.scaladsl.{Http, _}
 import akka.stream.ActorMaterializer
 import org.denigma.drugage.routes.Router
 
-class MainActor  extends Actor with ActorLogging // Routes
+class MainActor extends Actor with ActorLogging // Routes
 {
   implicit val system = context.system
   implicit val materializer = ActorMaterializer()
@@ -27,7 +27,7 @@ class MainActor  extends Actor with ActorLogging // Routes
     log.info("Main actor has been stoped...")
   }
 
-  override def postStop(: Unit  = {
+  override def postStop(): Unit  = {
     onStop()
   }
 

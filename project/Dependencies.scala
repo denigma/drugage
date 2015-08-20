@@ -20,7 +20,10 @@ object Dependencies {
 	lazy val sjsLibs= Def.setting(Seq(
 		"org.querki" %%% "jquery-facade" % Versions.jqueryFacade, //scalajs facade for jQuery + jQuery extensions
 
-		"org.denigma" %%% "semantic-ui-facade" % Versions.semanticUIFacade
+		"org.denigma" %%% "semantic-ui-facade" % Versions.semanticUIFacade,
+
+		"org.denigma" %%% "semantic-binding" % Versions.semanticBinding
+
 	))
 
 	// dependencies on javascript libs

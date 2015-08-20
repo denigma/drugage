@@ -13,5 +13,3 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0")
 addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.7") //scalajs sbt-web support
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.0")
-
-resolvers += "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases/"
