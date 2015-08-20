@@ -20,7 +20,10 @@ object Dependencies {
 	lazy val sjsLibs= Def.setting(Seq(
 		"org.querki" %%% "jquery-facade" % Versions.jqueryFacade, //scalajs facade for jQuery + jQuery extensions
 
-		"org.denigma" %%% "semantic-ui-facade" % Versions.semanticUIFacade
+		"org.denigma" %%% "semantic-ui-facade" % Versions.semanticUIFacade,
+
+		"org.denigma" %%% "semantic-binding" % Versions.semanticBinding  excludeAll ExclusionRule(organization = "com.github.inthenow")
+
 	))
 
 	// dependencies on javascript libs
@@ -44,7 +47,7 @@ object Dependencies {
 	lazy val rdf= Def.setting(Seq(
 		//"org.w3" %% "banana-bigdata" % Versions.bananaBigdata excludeAll ExclusionRule(organization = "com.github.inthenow"),
 
-		"org.w3" %% "banana-sesame" % Versions.bananaRdf
+		"org.w3" %% "banana-sesame" % Versions.bananaRdf excludeAll ExclusionRule(organization = "com.github.inthenow")
 	))
 
 	lazy val otherJVM: Def.Initialize[Seq[ModuleID]]  = Def.setting(Seq(
