@@ -1,8 +1,7 @@
 package org.denigma.drugage.views
 
-import org.denigma.binding.binders.{GeneralBinder, NavigationBinding}
-import org.denigma.binding.views.BindableView
-import org.denigma.binding.views.collections.CollectionView
+import org.denigma.binding.binders.{NavigationBinder, GeneralBinder}
+import org.denigma.binding.views.{ItemsSeqView, BindableView}
 import org.scalajs.dom.raw.HTMLElement
 import rx.Rx
 import rx.core.Var
@@ -22,7 +21,7 @@ object TestData{
  * @param elem html element
  * @param params view params (if any)
  */
-class MenuView(val elem: HTMLElement, val params: Map[String, Any] = Map.empty) extends CollectionView
+class MenuView(val elem: HTMLElement, val params: Map[String, Any] = Map.empty) extends ItemsSeqView
 {
 
   override type Item = String
@@ -30,7 +29,7 @@ class MenuView(val elem: HTMLElement, val params: Map[String, Any] = Map.empty) 
   override type ItemView = MenuItem
 
   override def newItem(item: Item): ItemView = this.constructItemView(item){ case (el, mp)=>
-    new MenuItem(el, item, mp).withBinders(i=>List(new GeneralBinder(i), new NavigationBinding(i)))
+    new MenuItem(el, item, mp).withBinders(i=>List(new GeneralBinder(i), new NavigationBinder(i)))
   }
 
   override val items: Rx[List[Item]] = Var(TestData.menuItems)

@@ -22,22 +22,18 @@ object Dependencies {
 
 		"org.denigma" %%% "semantic-ui-facade" % Versions.semanticUIFacade,
 
-		"org.denigma" %%% "semantic-binding" % Versions.semanticBinding  excludeAll ExclusionRule(organization = "com.github.inthenow")
+		"org.denigma" %%% "semantic-controls" % Versions.semanticControls  excludeAll ExclusionRule(organization = "com.github.inthenow")
 
 	))
 
 	// dependencies on javascript libs
 	lazy val webjars= Def.setting(Seq(
 
-		"org.webjars" % "Semantic-UI" % Versions.semanticUI, // css theme, similar to bootstrap
-
-		"org.webjars" % "selectize.js" % Versions.selectize // select control
+		"org.webjars" % "Semantic-UI" % Versions.semanticUI
 	))
 
 	// common purpose libs
 	lazy val shared = Def.setting(Seq(
-		"com.softwaremill.quicklens" %%% "quicklens" % Versions.quicklens, // nice lenses for case classes
-
 		"com.squants"  %% "squants"  % Versions.squants,
 
 		"org.denigma" %%% "binding-controls" % Versions.bindingControls
