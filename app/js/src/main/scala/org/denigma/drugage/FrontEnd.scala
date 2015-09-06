@@ -1,6 +1,6 @@
 package org.denigma.drugage
 
-import org.denigma.binding.binders.{GeneralBinder, NavigationBinding}
+import org.denigma.binding.binders.{NavigationBinder, GeneralBinder}
 import org.denigma.binding.extensions._
 import org.denigma.binding.views.BindableView
 import org.denigma.controls.login.{AjaxSession, LoginView}
@@ -34,7 +34,7 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
   override lazy val injector = defaultInjector.register("menu")
   {
     case (el, args) =>
-      new MenuView(el, args).withBinders(menu=>List(new GeneralBinder(menu), new NavigationBinding(menu)))
+      new MenuView(el, args).withBinders(menu=>List(new GeneralBinder(menu), new NavigationBinder(menu)))
   }
   .register("sidebar"){ case (el, args) => new SidebarView(el, args).withBinder(new GeneralBinder(_)) }
   .register("login"){ case (el, args) => new LoginView(el, session, args).withBinder(new GeneralBinder(_)) }
@@ -43,7 +43,7 @@ object FrontEnd extends BindableView with scalajs.js.JSApp
 
   @JSExport
   def main(): Unit = {
-    this.bindView(this.viewElement)
+    this.bindElement(this.viewElement)
     this.login("guest") // TODO: change it when session mechanism will work well
   }
 

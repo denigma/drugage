@@ -13,3 +13,5 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.7.0")
 addSbtPlugin("com.vmunier" % "sbt-play-scalajs" % "0.2.7") //scalajs sbt-web support
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.0")
+
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "0.6.5") //newest ScalaJSVersion to evict the previous one
